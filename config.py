@@ -1,9 +1,9 @@
 from cs50 import SQL
-db = SQL("sqlite:///data/faces.db")
+db = SQL('sqlite:///data/faces.db')
 
 search = 'static/All/'
-extentions = ["JPG", "jpg", "JPEG", "jpeg", "BMP", "bmp", "PNG", "png"]
-tofinddir = "static/pics/"
+extentions = ['JPG', 'jpg', 'JPEG', 'jpeg', 'BMP', 'bmp', 'PNG', 'png']
+tofinddir = 'static/pics/'
 unknowndir = 'static/assets/img/'
 
 datadir = 'data/'
