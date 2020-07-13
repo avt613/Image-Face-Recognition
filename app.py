@@ -57,12 +57,12 @@ def pic():
         image_path_pst = request.form.get('picpath')
         os.remove('{0}{1}'.format(unknowndir, os.path.split(image_path_pst)[1]))
         for i in range(length_pst):
-            image = request.form.get('image_{0}_cut'.format(i))
+            picture = request.form.get('image_{0}_cut'.format(i))
             image_name_orig_pst = request.form.get('image_{0}_name_orig'.format(i))
             image_name_pst = request.form.get('image_{0}_name'.format(i))
             yn_pst = request.form.get('image_{0}_yn'.format(i))
             if image_name_orig_pst != image_name_pst and image_name_pst != "Unknown" and image_name_pst != "":
-                face_image = face_recognition.load_image_file(unknowndir + image)
+                face_image = face_recognition.load_image_file(unknowndir + picture)
                 face_face_encoding = face_recognition.face_encodings(face_image)[0]
                 # Create arrays of known face encodings and their names
                 known_face_encodings_toadd.append(face_face_encoding)
@@ -70,9 +70,9 @@ def pic():
                 known_face_encodings.append(face_face_encoding)
                 known_face_names.append(image_name_pst)
                 newimageloc = knowndir + image_name_pst + "-" + str(uuid.uuid1()) + ".JPG"
-                os.rename(unknowndir + image, newimageloc)
+                os.rename(unknowndir + picture, newimageloc)
             else:
-                os.remove(unknowndir + image) 
+                os.remove(unknowndir + picture) 
         with open(known_face_names_loc, 'a') as filehandle:
             for listitem in known_face_encodings_toadd:
                 filehandle.write('%s\n' % listitem)
@@ -81,9 +81,9 @@ def pic():
                 filehandle.write('%s\n' % listitem)
     random_picture = random.choice(pictures)
     random_picid = random_picture[0]
-    while random_picid == image_id_pst:
-        random_picture = random.choice(pictures)
-        random_picid = random_picture[0]
+    #while random_picid == image_id_pst:
+    #    random_picture = random.choice(pictures)
+    #    random_picid = random_picture[0]
     random_filename = random_picture[1]
     length = ""
     cut_faces = cut(random_filename)
@@ -92,17 +92,16 @@ def pic():
 
 #------------Extract faces
 def cut(imagename):
-    imagetoname = imagename
     cut_faces = []
     # Load an image with an unknown face
-    unknown_image = face_recognition.load_image_file(imagetoname)
+    unknown_image = face_recognition.load_image_file(imagename)
     # Find all the faces and face encodings in the unknown image
     face_locations = face_recognition.face_locations(unknown_image)
     face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
     # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
     # See http://pillow.readthedocs.io/ for more about PIL/Pillow
     pil_image = Image.fromarray(unknown_image)
-    faces = Image.open(imagetoname)
+    faces = Image.open(imagename)
     # Create a Pillow ImageDraw Draw instance to draw with
     draw = ImageDraw.Draw(pil_image)
     facenum = 0
