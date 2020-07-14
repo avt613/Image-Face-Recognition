@@ -21,27 +21,17 @@ def after_request(response):
 known_face_encodings = []
 known_face_names = []
 
-# open file and read the content in a list
-query = db.execute("SELECT * FROM faces")
-for i in range(len(query)):
-    known_face_names.append(query[i]["name"])
-    known_face_encodings.append(str(query[i]["encoding"]).strip('[]'))
-#with open(known_face_encodings_loc, 'r') as filehandle:
-#    text = filehandle.read()
-#    known_face_encodings = [[float(j) for j in i.strip().strip('[').split()] for i in text.split(']')[:-1]]
-#with open(known_face_names_loc, 'r') as filehandle:
-#    for line in filehandle:
-#        # remove linebreak which is the last character of the string
-#        currentPlace = line[:-1]
-#        # add item to the list
-#        known_face_names.append(currentPlace)
+res = dbget()
+known_face_encodings = res[0]
+known_face_names = res[1]
+
 #------------delete all saved images
 filelist = [ f for f in os.listdir(unknowndir)]
 for f in filelist:
     os.remove(os.path.join(unknowndir, f))
 #--------------------------------
 
-query = db.execute("SELECT * FROM pictures")
+query = frdb.execute("SELECT * FROM pictures")
 pictures = []
 for i in range(len(query)):
     pictures.append([query[i]["id"],query[i]["path"]])
@@ -69,8 +59,7 @@ def pic():
             if image_name_orig_pst != image_name_pst and image_name_pst != "Unknown" and image_name_pst != "":
                 face_image = face_recognition.load_image_file(unknowndir + picture)
                 face_face_encoding = face_recognition.face_encodings(face_image)[0]
-                # Create arrays of known face encodings and their names
-                db.execute("INSERT INTO faces VALUES(NULL, ?, ?)", image_name_pst, str(face_face_encoding))
+                dbadd(face_face_encoding, image_name_pst)
                 #known_face_encodings_toadd.append(face_face_encoding)
                 #known_face_names_toadd.append(image_name_pst)
                 known_face_encodings.append(face_face_encoding)
