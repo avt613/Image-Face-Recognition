@@ -20,16 +20,21 @@ def after_request(response):
 # define an empty list
 known_face_encodings = []
 known_face_names = []
+
 # open file and read the content in a list
-with open(known_face_encodings_loc, 'r') as filehandle:
-    text = filehandle.read()
-    known_face_encodings = [[float(j) for j in i.strip().strip('[').split()] for i in text.split(']')[:-1]]
-with open(known_face_names_loc, 'r') as filehandle:
-    for line in filehandle:
-        # remove linebreak which is the last character of the string
-        currentPlace = line[:-1]
-        # add item to the list
-        known_face_names.append(currentPlace)
+query = db.execute("SELECT * FROM faces")
+for i in range(len(query)):
+    known_face_names.append(query[i]["name"])
+    known_face_encodings.append(str(query[i]["encoding"]).strip('[]'))
+#with open(known_face_encodings_loc, 'r') as filehandle:
+#    text = filehandle.read()
+#    known_face_encodings = [[float(j) for j in i.strip().strip('[').split()] for i in text.split(']')[:-1]]
+#with open(known_face_names_loc, 'r') as filehandle:
+#    for line in filehandle:
+#        # remove linebreak which is the last character of the string
+#        currentPlace = line[:-1]
+#        # add item to the list
+#        known_face_names.append(currentPlace)
 #------------delete all saved images
 filelist = [ f for f in os.listdir(unknowndir)]
 for f in filelist:
@@ -51,8 +56,8 @@ def pic():
     image_id_pst=''
     if request.method == "POST":
         length_pst = int(request.form.get("length"))
-        known_face_encodings_toadd = []
-        known_face_names_toadd = []
+        #known_face_encodings_toadd = []
+        #known_face_names_toadd = []
         image_id_pst = request.form.get('picid')
         image_path_pst = request.form.get('picpath')
         os.remove('{0}{1}'.format(unknowndir, os.path.split(image_path_pst)[1]))
@@ -65,25 +70,26 @@ def pic():
                 face_image = face_recognition.load_image_file(unknowndir + picture)
                 face_face_encoding = face_recognition.face_encodings(face_image)[0]
                 # Create arrays of known face encodings and their names
-                known_face_encodings_toadd.append(face_face_encoding)
-                known_face_names_toadd.append(image_name_pst)
+                db.execute("INSERT INTO faces VALUES(NULL, ?, ?)", image_name_pst, str(face_face_encoding))
+                #known_face_encodings_toadd.append(face_face_encoding)
+                #known_face_names_toadd.append(image_name_pst)
                 known_face_encodings.append(face_face_encoding)
                 known_face_names.append(image_name_pst)
                 newimageloc = knowndir + image_name_pst + "-" + str(uuid.uuid1()) + ".JPG"
                 os.rename(unknowndir + picture, newimageloc)
             else:
                 os.remove(unknowndir + picture) 
-        with open(known_face_names_loc, 'a') as filehandle:
-            for listitem in known_face_encodings_toadd:
-                filehandle.write('%s\n' % listitem)
-        with open(known_face_names_loc, 'a') as filehandle:
-            for listitem in known_face_names_toadd:
-                filehandle.write('%s\n' % listitem)
+#        with open(known_face_names_loc, 'a') as filehandle:
+#            for listitem in known_face_encodings_toadd:
+#                filehandle.write('%s\n' % listitem)
+#        with open(known_face_names_loc, 'a') as filehandle:
+#            for listitem in known_face_names_toadd:
+#                filehandle.write('%s\n' % listitem)
     random_picture = random.choice(pictures)
     random_picid = random_picture[0]
-    #while random_picid == image_id_pst:
-    #    random_picture = random.choice(pictures)
-    #    random_picid = random_picture[0]
+    while random_picid == image_id_pst:
+        random_picture = random.choice(pictures)
+        random_picid = random_picture[0]
     random_filename = random_picture[1]
     length = ""
     cut_faces = cut(random_filename)
