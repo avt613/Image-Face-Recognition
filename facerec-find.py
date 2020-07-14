@@ -10,17 +10,10 @@ imagetoname = tofinddir + imagename
 known_face_encodings = []
 known_face_names = []
 
-# open file and read the content in a list
-with open('known_face_encodings.txt', 'r') as filehandle:
-    text = filehandle.read()
-    known_face_encodings = [[float(j) for j in i.strip().strip('[').split()] for i in text.split(']')[:-1]]
-with open('known_face_names.txt', 'r') as filehandle:
-    for line in filehandle:
-        # remove linebreak which is the last character of the string
-        currentPlace = line[:-1]
-        # add item to the list
-        known_face_names.append(currentPlace)
-
+from db import *
+res = dbget()
+known_face_encodings = res[0]
+known_face_names = res[1]
 folder = os.listdir(tofinddir)
 for image in folder:
     imagetoname = tofinddir + image

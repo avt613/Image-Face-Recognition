@@ -26,10 +26,6 @@ for image in folder:
 print('Learned encoding for', len(known_face_encodings), 'images.')
 #print(known_face_encodings)
 #print(known_face_names)
-with open("known_face_encodings.txt", 'w') as filehandle:
-    for listitem in known_face_encodings:
-        filehandle.write('%s\n' % listitem)
-with open("known_face_names.txt", 'w') as filehandle:
-    for listitem in known_face_names:
-        filehandle.write('%s\n' % listitem)
 
+from db import *
+dbadd(known_face_encodings, known_face_names)
