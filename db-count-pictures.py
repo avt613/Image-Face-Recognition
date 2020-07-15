@@ -1,3 +1,3 @@
-from config import frdb
-print(frdb.execute("SELECT count(*) AS num FROM pictures")[0]["num"])
+from config import db
+print(db.execute("SELECT count(*) AS num FROM pictures")[0]["num"])
 

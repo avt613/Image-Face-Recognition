@@ -2,12 +2,12 @@ import face_recognition
 from pathlib import Path
 import glob
 import os
-from config import search, frdb, extentions
+from config import search, db, extentions
 db.execute('DELETE FROM pictures')
 for ext in extentions:
     images = glob.glob(search + '**/*.' + ext, recursive=True)
     for image in images:
-        query = frdb.execute('INSERT INTO pictures VALUES(NULL, ?)',image)
+        query = db.execute('INSERT INTO pictures VALUES(NULL, ?)',image)
         print(image)
         # Load an image with an unknown face
         #unknown_image = face_recognition.load_image_file(image)

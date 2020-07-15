@@ -31,7 +31,7 @@ for f in filelist:
     os.remove(os.path.join(unknowndir, f))
 #--------------------------------
 
-query = frdb.execute("SELECT * FROM pictures")
+query = db.execute("SELECT * FROM pictures")
 pictures = []
 for i in range(len(query)):
     pictures.append([query[i]["id"],query[i]["path"]])
