@@ -5,6 +5,7 @@ import face_recognition
 from PIL import Image, ImageDraw
 import uuid
 from config import *
+
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -26,9 +27,14 @@ known_face_encodings = res[0]
 known_face_names = res[1]
 
 #------------delete all saved images
+if not os.path.exists(unknowndir):
+    os.mkdir(unknowndir)
+if not os.path.exists(knowndir):
+    os.mkdir(knowndir)
 filelist = [ f for f in os.listdir(unknowndir)]
 for f in filelist:
     os.remove(os.path.join(unknowndir, f))
+
 #--------------------------------
 
 query = db.execute("SELECT * FROM pictures")
@@ -41,9 +47,8 @@ for i in range(len(query)):
 def index():
     return render_template("index.html")
 
-@app.route("/pic", methods=["GET", "POST"])
-def pic():
-    image_id_pst=''
+@app.route("/post", methods=["POST"])
+def post():
     if request.method == "POST":
         length_pst = int(request.form.get("length"))
         known_face_encodings_toadd = []
@@ -68,17 +73,15 @@ def pic():
             else:
                 os.remove(unknowndir + picture) 
         dbadd(known_face_encodings_toadd, known_face_names_toadd)
-#        with open(known_face_names_loc, 'a') as filehandle:
-#            for listitem in known_face_encodings_toadd:
-#                filehandle.write('%s\n' % listitem)
-#        with open(known_face_names_loc, 'a') as filehandle:
-#            for listitem in known_face_names_toadd:
-#                filehandle.write('%s\n' % listitem)
+    return redirect("pic")
+
+@app.route("/pic")
+def pic():
     random_picture = random.choice(pictures)
     random_picid = random_picture[0]
-    while random_picid == image_id_pst:
-        random_picture = random.choice(pictures)
-        random_picid = random_picture[0]
+    #while random_picid == image_id_pst:
+    #    random_picture = random.choice(pictures)
+    #    random_picid = random_picture[0]
     random_filename = random_picture[1]
     length = ""
     cut_faces = cut(random_filename)
