@@ -29,6 +29,11 @@ known_face_names = res[1]
 filelist = [ f for f in os.listdir(unknowndir)]
 for f in filelist:
     os.remove(os.path.join(unknowndir, f))
+if not os.path.exists(unknowndir):
+    os.mkdir(knowndir)
+if not os.path.exists(unknowndir):
+    os.mkdir(knowndir)
+
 #--------------------------------
 
 query = db.execute("SELECT * FROM pictures")
