@@ -41,13 +41,12 @@ for i in range(len(query)):
 def index():
     return render_template("index.html")
 
-@app.route("/pic", methods=["GET", "POST"])
-def pic():
-    image_id_pst=''
+@app.route("/post", methods=["POST"])
+def post():
     if request.method == "POST":
         length_pst = int(request.form.get("length"))
-        #known_face_encodings_toadd = []
-        #known_face_names_toadd = []
+        known_face_encodings_toadd = []
+        known_face_names_toadd = []
         image_id_pst = request.form.get('picid')
         image_path_pst = request.form.get('picpath')
         os.remove('{0}{1}'.format(unknowndir, os.path.split(image_path_pst)[1]))
@@ -59,26 +58,24 @@ def pic():
             if image_name_orig_pst != image_name_pst and image_name_pst != "Unknown" and image_name_pst != "":
                 face_image = face_recognition.load_image_file(unknowndir + picture)
                 face_face_encoding = face_recognition.face_encodings(face_image)[0]
-                dbadd(face_face_encoding, image_name_pst)
-                #known_face_encodings_toadd.append(face_face_encoding)
-                #known_face_names_toadd.append(image_name_pst)
+                known_face_encodings_toadd.append(face_face_encoding)
+                known_face_names_toadd.append(image_name_pst)
                 known_face_encodings.append(face_face_encoding)
                 known_face_names.append(image_name_pst)
                 newimageloc = knowndir + image_name_pst + "-" + str(uuid.uuid1()) + ".JPG"
                 os.rename(unknowndir + picture, newimageloc)
             else:
                 os.remove(unknowndir + picture) 
-#        with open(known_face_names_loc, 'a') as filehandle:
-#            for listitem in known_face_encodings_toadd:
-#                filehandle.write('%s\n' % listitem)
-#        with open(known_face_names_loc, 'a') as filehandle:
-#            for listitem in known_face_names_toadd:
-#                filehandle.write('%s\n' % listitem)
+        dbadd(known_face_encodings_toadd, known_face_names_toadd)
+    return redirect("pic")
+
+@app.route("/pic")
+def pic():
     random_picture = random.choice(pictures)
     random_picid = random_picture[0]
-    while random_picid == image_id_pst:
-        random_picture = random.choice(pictures)
-        random_picid = random_picture[0]
+    #while random_picid == image_id_pst:
+    #    random_picture = random.choice(pictures)
+    #    random_picid = random_picture[0]
     random_filename = random_picture[1]
     length = ""
     cut_faces = cut(random_filename)
