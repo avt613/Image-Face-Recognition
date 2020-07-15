@@ -21,6 +21,7 @@ db = SQL('sqlite:///data/faces.db')
 
 def dbadd(known_face_encodings, known_face_names):
     for i in range(len(known_face_encodings)):
+
 #        # Create a string of 128 numbers from 0 to 127
 #        # '0','1','2','3','4' ...
 #        queryColumns = ",".join(["'" + str(x) + "'" for x in range(128)])
@@ -186,4 +187,3 @@ def dbget():
     #print(saved_encodings)
     #print(saved_names)
     return saved_encodings, saved_names
-
