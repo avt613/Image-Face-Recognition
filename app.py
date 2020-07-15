@@ -53,6 +53,7 @@ def post():
         length_pst = int(request.form.get("length"))
         known_face_encodings_toadd = []
         known_face_names_toadd = []
+        known_face_images_toadd = []
         image_id_pst = request.form.get('picid')
         image_path_pst = request.form.get('picpath')
         os.remove('{0}{1}'.format(unknowndir, os.path.split(image_path_pst)[1]))
@@ -69,10 +70,11 @@ def post():
                 known_face_encodings.append(face_face_encoding)
                 known_face_names.append(image_name_pst)
                 newimageloc = knowndir + image_name_pst + "-" + str(uuid.uuid1()) + ".JPG"
+                known_face_images_toadd.append(newimageloc)
                 os.rename(unknowndir + picture, newimageloc)
             else:
                 os.remove(unknowndir + picture) 
-        dbadd(known_face_encodings_toadd, known_face_names_toadd)
+        dbadd(known_face_encodings_toadd, known_face_names_toadd, known_face_images_toadd)
     return redirect("pic")
 
 @app.route("/pic")
