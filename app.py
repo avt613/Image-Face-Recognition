@@ -46,8 +46,8 @@ def pic():
     image_id_pst=''
     if request.method == "POST":
         length_pst = int(request.form.get("length"))
-        #known_face_encodings_toadd = []
-        #known_face_names_toadd = []
+        known_face_encodings_toadd = []
+        known_face_names_toadd = []
         image_id_pst = request.form.get('picid')
         image_path_pst = request.form.get('picpath')
         os.remove('{0}{1}'.format(unknowndir, os.path.split(image_path_pst)[1]))
@@ -59,15 +59,15 @@ def pic():
             if image_name_orig_pst != image_name_pst and image_name_pst != "Unknown" and image_name_pst != "":
                 face_image = face_recognition.load_image_file(unknowndir + picture)
                 face_face_encoding = face_recognition.face_encodings(face_image)[0]
-                dbadd(face_face_encoding, image_name_pst)
-                #known_face_encodings_toadd.append(face_face_encoding)
-                #known_face_names_toadd.append(image_name_pst)
+                known_face_encodings_toadd.append(face_face_encoding)
+                known_face_names_toadd.append(image_name_pst)
                 known_face_encodings.append(face_face_encoding)
                 known_face_names.append(image_name_pst)
                 newimageloc = knowndir + image_name_pst + "-" + str(uuid.uuid1()) + ".JPG"
                 os.rename(unknowndir + picture, newimageloc)
             else:
                 os.remove(unknowndir + picture) 
+        dbadd(known_face_encodings_toadd, known_face_names_toadd)
 #        with open(known_face_names_loc, 'a') as filehandle:
 #            for listitem in known_face_encodings_toadd:
 #                filehandle.write('%s\n' % listitem)
