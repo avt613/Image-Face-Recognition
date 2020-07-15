@@ -5,6 +5,7 @@ import face_recognition
 from PIL import Image, ImageDraw
 import uuid
 from config import *
+
 app = Flask(__name__)
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
@@ -27,8 +28,8 @@ known_face_names = res[1]
 
 #------------delete all saved images
 if not os.path.exists(unknowndir):
-    os.mkdir(knowndir)
-if not os.path.exists(unknowndir):
+    os.mkdir(unknowndir)
+if not os.path.exists(knowndir):
     os.mkdir(knowndir)
 filelist = [ f for f in os.listdir(unknowndir)]
 for f in filelist:
