@@ -33,7 +33,10 @@ def dbadd(known_face_encodings, known_face_names):
         queryValues = (known_face_names[i],);
         # Loop from 0 to 127 (128 iterations in total)
         for j in range(128):
-            queryValues = queryValues + (known_face_encodings[i][j].item(),)
+            if j == 127:
+                queryValues = queryValues + (known_face_encodings[i][j].item())
+            elif:
+                queryValues = queryValues + (known_face_encodings[i][j].item(),)
         
         # Spread queryValues tuple and apply it to separate function arguments
         db.execute(queryString, *queryValues)
