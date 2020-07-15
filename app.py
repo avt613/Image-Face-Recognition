@@ -94,7 +94,7 @@ def cut(imagename):
     # Load an image with an unknown face
     unknown_image = face_recognition.load_image_file(imagename)
     # Find all the faces and face encodings in the unknown image
-    face_locations = face_recognition.face_locations(unknown_image)
+    face_locations = face_recognition.face_locations(unknown_image, number_of_times_to_upsample=2)
     face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
     # Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
     # See http://pillow.readthedocs.io/ for more about PIL/Pillow
