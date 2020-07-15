@@ -20,7 +20,6 @@ from cs50 import SQL
 db = SQL('sqlite:///data/faces.db')
 
 def dbadd(known_face_encodings, known_face_names):
-    dbsetup()
     for i in range(len(known_face_encodings)):
         # Create a string of 128 numbers from 0 to 127
         # '0','1','2','3','4' ...
