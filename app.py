@@ -26,13 +26,13 @@ known_face_encodings = res[0]
 known_face_names = res[1]
 
 #------------delete all saved images
+if not os.path.exists(unknowndir):
+    os.mkdir(knowndir)
+if not os.path.exists(unknowndir):
+    os.mkdir(knowndir)
 filelist = [ f for f in os.listdir(unknowndir)]
 for f in filelist:
     os.remove(os.path.join(unknowndir, f))
-if not os.path.exists(unknowndir):
-    os.mkdir(knowndir)
-if not os.path.exists(unknowndir):
-    os.mkdir(knowndir)
 
 #--------------------------------
 
