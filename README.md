@@ -1,4 +1,6 @@
 # Image-Face-Recognition
+WARNING: This program does not work well on the Heroku web app as it can use more than 0.5GB RAM which is what Heroku free plan is limited to.
+
 Using face recognition to identify people in photos
 
 you can download this and run it with "gunicorn app:app"
