@@ -108,7 +108,7 @@ def cut(imagename):
     # Loop through each face found in the unknown image
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
         # See if the face is a match for the known face(s)
-        matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=0.5)
+        matches = face_recognition.compare_faces(known_face_encodings, face_encoding, tolerance=int(tolerance))
         # Or instead, use the known face with the smallest distance to the new face
         face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
         best_match_index = np.argmin(face_distances)

@@ -1,11 +1,11 @@
 search = 'static/All/'
 extentions = ['JPG', 'jpg', 'JPEG', 'jpeg', 'BMP', 'bmp', 'PNG', 'png']
-tofinddir = 'static/pics/'
+tofinddir = 'static/All/'
 unknowndir = 'static/assets/img/'
 
 datadir = 'data/'
 knowndir = datadir + 'known/'
-
+tolerance = 0.5
 # To add
 # from config import *
 # dbadd(known_face_encodings, known_face_names)
